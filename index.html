@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EFX FITNESS — Ankara Sincan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --bg:    #09090B;
+      --bg2:   #0F0F12;
+      --bord:  rgba(200,168,75,0.12);
+      --gold:  #C8A84B;
+      --gold2: #E8C860;
+      --gold3: #8A6820;
+      --glow:  rgba(200,168,75,0.18);
+      --white: #F5F0E8;
+      --muted: rgba(245,240,232,0.45);
+      --dim:   rgba(245,240,232,0.18);
+      --ffh:   'Bebas Neue', sans-serif;
+      --ffi:   'Cormorant Garamond', serif;
+      --ffs:   'Barlow Condensed', sans-serif;
+      --ffb:   'Barlow', sans-serif;
+    }
+
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg);color:var(--white);font-family:var(--ffs);overflow-x:hidden;cursor:none; }
+
+    /* CURSOR */
+    #cx{position:fixed;width:9px;height:9px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;}
+    #cr{position:fixed;width:36px;height:36px;border:1px solid rgba(200,168,75,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
+
+    /* GRAIN */
+    body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.02;pointer-events:none;z-index:9990;}
+
+    /* ─── NAV ─── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:18px 72px;transition:background .4s,border-color .4s;}
+    nav.scrolled{background:rgba(9,9,11,.96);border-bottom:1px solid var(--bord);backdrop-filter:blur(16px);}
+    nav::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,9,11,.9),transparent);pointer-events:none;}
+
+    .nav-logo{position:relative;z-index:1;display:flex;align-items:center;gap:12px;text-decoration:none;}
+    .nav-logo-ball{width:54px;height:54px;background:linear-gradient(150deg,#FFFDF6 0%,#F0E2BE 100%);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);box-shadow:0 0 0 1px rgba(200,168,75,.5),0 4px 18px rgba(200,168,75,.25);display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;transition:box-shadow .3s;}
+    .nav-logo-ball img{width:100%;height:100%;object-fit:contain;}
+    .nav-logo:hover .nav-logo-ball{box-shadow:0 0 0 1px rgba(200,168,75,.75),0 6px 28px rgba(200,168,75,.4);}
+    .nav-wm{font-family:var(--ffh);font-size:20px;letter-spacing:5px;background:linear-gradient(135deg,var(--gold2),var(--gold),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-wm small{font-size:11px;letter-spacing:1px;opacity:.7;vertical-align:middle;margin-left:1px;}
+
+    .nav-links{position:relative;z-index:1;display:flex;gap:44px;list-style:none;}
+    .nav-links a{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--white);text-decoration:none;opacity:.4;transition:opacity .3s,color .3s;}
+    .nav-links a:hover{opacity:1;color:var(--gold);}
+
+    .nav-cta{position:relative;z-index:1;font-family:var(--ffs);font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--bg);background:linear-gradient(135deg,var(--gold2),var(--gold));border:none;padding:11px 26px;cursor:none;clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);transition:all .3s;box-shadow:0 4px 24px rgba(200,168,75,.25);}
+    .nav-cta:hover{box-shadow:0 8px 40px rgba(200,168,75,.5);transform:translateY(-1px);}
+
+    /* ─── HERO ─── */
+    .hero{position:relative;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:120px 72px 90px;overflow:hidden;gap:48px;}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 72% 50%,rgba(200,168,75,.07) 0%,transparent 68%),radial-gradient(ellipse 40% 50% at 15% 80%,rgba(200,168,75,.04) 0%,transparent 60%);pointer-events:none;}
+
+    /* diagonal accent */
+    .hero-deco{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+    .hero-deco::before{content:'';position:absolute;top:-20%;left:48%;width:1px;height:140%;background:linear-gradient(to bottom,transparent,rgba(200,168,75,.1) 35%,rgba(200,168,75,.1) 65%,transparent);transform:rotate(-7deg);}
+    .hero-deco::after{content:'';position:absolute;top:-20%;left:52%;width:1px;height:140%;background:linear-gradient(to bottom,transparent,rgba(200,168,75,.05) 40%,rgba(200,168,75,.05) 60%,transparent);transform:rotate(-7deg);}
+
+    /* ─── HERO TEXT ─── */
+    .hero-text{position:relative;z-index:2;}
+
+    .hero-eye{display:inline-flex;align-items:center;gap:12px;font-size:10px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:30px;opacity:0;animation:up .8s ease forwards .3s;}
+    .hero-eye::before{content:'';width:28px;height:1px;background:var(--gold);}
+
+    .hero-h1{font-family:var(--ffh);font-size:clamp(70px,9.5vw,144px);line-height:.87;letter-spacing:-1px;margin-bottom:44px;opacity:0;animation:up .9s ease forwards .55s;}
+    .hero-h1 .w1{display:block;color:var(--white);}
+    .hero-h1 .w2{display:block;background:linear-gradient(135deg,var(--gold2) 0%,var(--gold) 45%,var(--gold3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-h1 .w3{display:block;font-family:var(--ffi);font-style:italic;font-size:.72em;color:transparent;-webkit-text-stroke:1.5px rgba(200,168,75,.4);letter-spacing:5px;}
+
+    .hero-sub{font-family:var(--ffb);font-size:14px;font-weight:300;line-height:2;color:var(--muted);max-width:370px;margin-bottom:48px;opacity:0;animation:up .8s ease forwards .75s;}
+
+    .hero-btns{display:flex;align-items:center;gap:36px;margin-bottom:60px;opacity:0;animation:up .8s ease forwards .95s;}
+
+    .btn-gold{display:inline-block;font-family:var(--ffs);font-size:11px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--bg);background:linear-gradient(135deg,var(--gold2),var(--gold),var(--gold3));text-decoration:none;padding:16px 46px;cursor:none;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:all .35s;box-shadow:0 6px 32px rgba(200,168,75,.3);position:relative;overflow:hidden;}
+    .btn-gold::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold3),var(--gold),var(--gold2));opacity:0;transition:opacity .35s;}
+    .btn-gold span{position:relative;z-index:1;}
+    .btn-gold:hover{transform:translate(2px,-3px);box-shadow:0 12px 48px rgba(200,168,75,.45);}
+    .btn-gold:hover::before{opacity:1;}
+
+    .btn-line{display:inline-flex;align-items:center;gap:14px;font-family:var(--ffs);font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);text-decoration:none;cursor:none;transition:all .3s;}
+    .btn-line::before{content:'';width:28px;height:1px;background:var(--gold);transition:width .35s;}
+    .btn-line:hover::before{width:48px;}
+
+    .hero-stats{display:flex;gap:36px;opacity:0;animation:up .8s ease forwards 1.1s;}
+    .hst-num{font-family:var(--ffh);font-size:38px;letter-spacing:-1px;background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hst-lbl{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--dim);margin-top:2px;}
+
+    /* ─── EMBLEM ─── */
+    .hero-emb{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;opacity:0;animation:fi 1.2s ease forwards .65s;}
+
+    .emb-wrap{position:relative;width:clamp(280px,32vw,440px);}
+
+    /* ambient gold glow */
+    .emb-glow{position:absolute;inset:-18%;background:radial-gradient(circle,rgba(200,168,75,.22) 0%,transparent 65%);filter:blur(30px);animation:glowPulse 5s ease-in-out infinite;pointer-events:none;}
+    @keyframes glowPulse{0%,100%{opacity:.7;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+
+    /* angular plaque — cut corners, logo's own colors untouched */
+    .emb-plaque{position:relative;aspect-ratio:1;background:linear-gradient(150deg,#FFFDF6 0%,#F4EAD2 55%,#E8D8B0 100%);clip-path:polygon(40px 0,100% 0,100% calc(100% - 40px),calc(100% - 40px) 100%,0 100%,0 40px);display:flex;align-items:center;justify-content:center;padding:14%;box-shadow:0 0 0 1px rgba(200,168,75,.5),0 30px 70px rgba(0,0,0,.55),0 0 90px rgba(200,168,75,.18);}
+
+    .emb-img{width:100%;position:relative;transition:transform .6s ease;filter:drop-shadow(0 6px 16px rgba(0,0,0,.18));}
+    .emb-wrap:hover .emb-img{transform:scale(1.03);}
+
+    /* corner brackets on the uncut corners */
+    .emb-bracket{position:absolute;width:30px;height:30px;border:2px solid var(--gold);}
+    .emb-bracket.tr{top:-15px;right:-15px;border-left:none;border-bottom:none;}
+    .emb-bracket.bl{bottom:-15px;left:-15px;border-right:none;border-top:none;}
+
+    /* ribbon tag */
+    .emb-ribbon{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--bg);font-family:var(--ffs);font-size:10px;font-weight:700;letter-spacing:4px;padding:9px 26px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);white-space:nowrap;box-shadow:0 8px 24px rgba(200,168,75,.35);text-transform:uppercase;}
+
+    @keyframes up{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+
+    /* scroll cue */
+    .scue{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;}
+    .scue span{font-size:9px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--dim);}
+    .scue-bar{width:1px;height:56px;background:linear-gradient(to bottom,var(--gold),transparent);animation:puls 2s ease-in-out infinite;}
+    @keyframes puls{0%{transform:scaleY(0);transform-origin:top;opacity:1}49%{transform:scaleY(1);transform-origin:top}50%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+
+    /* ─── TICKER ─── */
+    .ticker{background:linear-gradient(90deg,var(--gold3),var(--gold),var(--gold2),var(--gold),var(--gold3));padding:11px 0;overflow:hidden;}
+    .ticker-track{display:flex;animation:scrl 24s linear infinite;white-space:nowrap;}
+    .ti{display:flex;align-items:center;gap:22px;padding:0 22px;font-family:var(--ffh);font-size:14px;letter-spacing:5px;text-transform:uppercase;color:rgba(9,9,11,.7);flex-shrink:0;}
+    .td{width:3px;height:3px;background:rgba(9,9,11,.35);border-radius:50%;}
+    @keyframes scrl{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* ─── SHARED ─── */
+    .lbl{font-size:10px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+    .lbl::before{content:'';width:18px;height:1px;background:var(--gold);}
+    .stitle{font-family:var(--ffh);font-size:clamp(48px,6.5vw,90px);line-height:.9;color:var(--white);}
+    .stitle .gc{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .stitle .oc{color:transparent;-webkit-text-stroke:1px rgba(200,168,75,.22);}
+
+    /* ─── ABOUT ─── */
+    .about{padding:160px 72px;display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center;position:relative;overflow:hidden;}
+    .about::before{content:'5';position:absolute;right:-60px;top:50%;transform:translateY(-50%);font-family:var(--ffh);font-size:clamp(300px,42vw,620px);color:transparent;-webkit-text-stroke:1px rgba(200,168,75,.04);pointer-events:none;user-select:none;line-height:1;}
+    .about-body{font-family:var(--ffb);font-size:15px;font-weight:300;line-height:1.9;color:var(--muted);max-width:450px;margin-top:24px;}
+
+    .stats{display:flex;flex-direction:column;}
+    .stat{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;padding:30px 0;border-bottom:1px solid var(--bord);}
+    .stat:first-child{border-top:1px solid var(--bord);}
+    .stn{font-family:var(--ffh);font-size:clamp(52px,5.5vw,76px);line-height:1;letter-spacing:-2px;background:linear-gradient(135deg,var(--gold2),var(--gold),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;min-width:108px;}
+    .stn-name{font-size:10px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--dim);margin-bottom:3px;}
+    .stn-desc{font-family:var(--ffb);font-size:13px;font-weight:300;color:rgba(245,240,232,.22);}
+
+    /* ─── SERVICES ─── */
+    .services{padding:100px 72px;}
+    .svc-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:60px;}
+    .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+
+    .sc{background:var(--bg2);padding:48px 36px 56px;position:relative;overflow:hidden;cursor:none;transition:transform .45s cubic-bezier(.23,1,.32,1);}
+    .sc::before{content:'';position:absolute;inset:0;background:linear-gradient(145deg,rgba(200,168,75,.07) 0%,transparent 50%);opacity:0;transition:opacity .45s;}
+    .sc::after{content:'';position:absolute;left:0;bottom:0;right:0;height:2px;background:linear-gradient(to right,var(--gold3),var(--gold),var(--gold2));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.23,1,.32,1);}
+    .sc:hover{transform:translateY(-10px);}
+    .sc:hover::before{opacity:1;}
+    .sc:hover::after{transform:scaleX(1);}
+
+    .sc-n{font-family:var(--ffh);font-size:11px;letter-spacing:5px;color:var(--gold3);margin-bottom:44px;}
+    .sc-ico{font-size:32px;margin-bottom:16px;display:block;}
+    .sc-nm{font-family:var(--ffh);font-size:27px;letter-spacing:1px;color:var(--white);margin-bottom:12px;line-height:1.05;}
+    .sc-ds{font-family:var(--ffb);font-size:13px;font-weight:300;line-height:1.75;color:var(--muted);}
+    .sc-ar{position:absolute;bottom:24px;right:24px;width:28px;height:28px;border:1px solid var(--bord);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;opacity:0;transition:all .35s;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);}
+    .sc:hover .sc-ar{opacity:1;background:linear-gradient(135deg,var(--gold3),var(--gold));border-color:transparent;color:var(--bg);}
+
+    /* ─── DIVIDER ─── */
+    .ghr{height:1px;background:linear-gradient(to right,transparent,var(--gold) 30%,var(--gold2) 50%,var(--gold) 70%,transparent);opacity:.2;}
+
+    /* ─── INFO ─── */
+    .info{display:grid;grid-template-columns:1.3fr 1fr;gap:3px;}
+    .ipanel{background:var(--bg2);padding:68px;position:relative;}
+    .ipanel::before{content:'';position:absolute;top:0;left:0;width:2px;height:52%;background:linear-gradient(to bottom,var(--gold),transparent);}
+    .ititle{font-family:var(--ffh);font-size:38px;letter-spacing:3px;color:var(--white);margin-bottom:44px;}
+
+    .hr-row{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid rgba(200,168,75,.07);}
+    .hr-row:first-child{border-top:1px solid rgba(200,168,75,.07);}
+    .hr-day{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);}
+    .hr-time{font-family:var(--ffh);font-size:19px;letter-spacing:2px;color:var(--white);}
+    .hr-time.gc{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+    .ci{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px;}
+    .cico{width:40px;height:40px;flex-shrink:0;background:rgba(200,168,75,.07);border:1px solid rgba(200,168,75,.18);display:flex;align-items:center;justify-content:center;font-size:15px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+    .clbl{font-size:9px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--gold3);margin-bottom:4px;}
+    .cval{font-family:var(--ffs);font-size:15px;font-weight:600;color:var(--white);line-height:1.5;}
+    .cval a{color:inherit;text-decoration:none;transition:color .3s;}
+    .cval a:hover{color:var(--gold);}
+
+    /* ─── FINALE ─── */
+    .finale{padding:140px 72px;text-align:center;position:relative;overflow:hidden;}
+    .finale::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(200,168,75,.1) 0%,transparent 65%);}
+
+    .fin-logo{width:150px;height:150px;background:linear-gradient(150deg,#FFFDF6 0%,#F4EAD2 55%,#E8D8B0 100%);clip-path:polygon(22px 0,100% 0,100% calc(100% - 22px),calc(100% - 22px) 100%,0 100%,0 22px);display:flex;align-items:center;justify-content:center;margin:0 auto 44px;padding:24px;box-shadow:0 0 0 1px rgba(200,168,75,.5),0 16px 40px rgba(0,0,0,.4),0 0 50px rgba(200,168,75,.2);}
+    .fin-logo img{width:100%;filter:drop-shadow(0 4px 10px rgba(0,0,0,.18));}
+
+    .fin-title{font-family:var(--ffh);font-size:clamp(56px,9vw,148px);line-height:.88;margin-bottom:52px;position:relative;z-index:1;}
+    .fin-title .t1{display:block;color:var(--white);}
+    .fin-title .t2{display:block;background:linear-gradient(135deg,var(--gold2) 0%,var(--gold) 40%,var(--gold3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .fin-title .t3{display:block;font-family:var(--ffi);font-style:italic;font-size:.7em;color:transparent;-webkit-text-stroke:1px rgba(200,168,75,.3);letter-spacing:8px;}
+
+    /* ─── FOOTER ─── */
+    footer{padding:40px 72px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--bord);}
+    .flogo{display:flex;align-items:center;gap:12px;}
+    .fball{width:44px;height:44px;background:linear-gradient(150deg,#FFFDF6 0%,#F0E2BE 100%);clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);box-shadow:0 0 0 1px rgba(200,168,75,.45),0 4px 14px rgba(200,168,75,.2);display:flex;align-items:center;justify-content:center;padding:5px;}
+    .fball img{width:100%;height:100%;object-fit:contain;}
+    .fwm{font-family:var(--ffh);font-size:18px;letter-spacing:5px;background:linear-gradient(135deg,var(--gold2),var(--gold),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .fcopy{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--dim);}
+    .fsocial a{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--dim);text-decoration:none;cursor:none;transition:color .3s;}
+    .fsocial a:hover{color:var(--gold);}
+
+    /* REVEAL */
+    .rv{opacity:0;transform:translateY(40px);transition:opacity .85s ease,transform .85s ease;}
+    .rv.in{opacity:1;transform:translateY(0);}
+    .rv.d1{transition-delay:.1s} .rv.d2{transition-delay:.2s} .rv.d3{transition-delay:.3s}
+
+    /* RESPONSIVE */
+    @media(max-width:1100px){
+      .hero{grid-template-columns:1fr;padding:120px 40px 90px;gap:0;}
+      .hero-emb{display:none;}
+      nav{padding:16px 40px;}
+      .nav-links{display:none;}
+      .about{grid-template-columns:1fr;padding:100px 40px;gap:60px;}
+      .services{padding:80px 40px;}
+      .svc-grid{grid-template-columns:1fr 1fr;}
+      .info{grid-template-columns:1fr;}
+      .ipanel{padding:52px 40px;}
+      .finale{padding:100px 40px;}
+      footer{padding:32px 40px;flex-direction:column;gap:20px;text-align:center;}
+    }
+    @media(max-width:640px){
+      .svc-grid{grid-template-columns:1fr;}
+      .hero-h1{font-size:clamp(60px,15vw,88px);}
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cx"></div>
+  <div id="cr"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-ball"><img src="efx-logo.png" alt="EFX" /></div>
+      <div class="nav-wm">EFX FITNESS <small>· 5</small></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#hakkimizda">Hakkımızda</a></li>
+      <li><a href="#hizmetler">Hizmetler</a></li>
+      <li><a href="#iletisim">İletişim</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('iletisim').scrollIntoView({behavior:'smooth'})">Üye Ol</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-deco"></div>
+
+    <!-- text left -->
+    <div class="hero-text">
+      <div class="hero-eye">Ankara · Sincan · 2019</div>
+      <h1 class="hero-h1">
+        <span class="w1">GÜÇLEN.</span>
+        <span class="w2">KAZAN.</span>
+        <span class="w3">Dönüşüm Burada.</span>
+      </h1>
+      <p class="hero-sub">Personal Training · Pilates<br>Boks &amp; Kickboks · Kadınlara Özel Alan<br>Menderes Mah. Sincan / Ankara</p>
+      <div class="hero-btns">
+        <a href="#hizmetler" class="btn-gold"><span>Programları Keşfet</span></a>
+        <a href="tel:05345630985" class="btn-line">Hemen Ara</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hst-num">5+</div><div class="hst-lbl">Yıl</div></div>
+        <div><div class="hst-num">400+</div><div class="hst-lbl">Üye</div></div>
+        <div><div class="hst-num">4</div><div class="hst-lbl">Program</div></div>
+      </div>
+    </div>
+
+    <!-- emblem right -->
+    <div class="hero-emb">
+      <div class="emb-wrap">
+        <div class="emb-glow"></div>
+        <span class="emb-bracket tr"></span>
+        <span class="emb-bracket bl"></span>
+        <div class="emb-plaque">
+          <img class="emb-img" src="efx-logo.png" alt="EFX Logo" />
+        </div>
+        <div class="emb-ribbon">Est. 2019 — Sincan</div>
+      </div>
+    </div>
+
+    <div class="scue"><span>Kaydır</span><div class="scue-bar"></div></div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <div class="ti">Personal Training<div class="td"></div></div>
+      <div class="ti">Pilates<div class="td"></div></div>
+      <div class="ti">Boks<div class="td"></div></div>
+      <div class="ti">Kickboks<div class="td"></div></div>
+      <div class="ti">Kadınlara Özel<div class="td"></div></div>
+      <div class="ti">EFX Fitness<div class="td"></div></div>
+      <div class="ti">Sincan · Ankara<div class="td"></div></div>
+      <div class="ti">Personal Training<div class="td"></div></div>
+      <div class="ti">Pilates<div class="td"></div></div>
+      <div class="ti">Boks<div class="td"></div></div>
+      <div class="ti">Kickboks<div class="td"></div></div>
+      <div class="ti">Kadınlara Özel<div class="td"></div></div>
+      <div class="ti">EFX Fitness<div class="td"></div></div>
+      <div class="ti">Sincan · Ankara<div class="td"></div></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="hakkimizda">
+    <div class="rv">
+      <div class="lbl">Biz Kimiz</div>
+      <h2 class="stitle">Sadece Bir<br>Spor Salonu<br><span class="gc">Değil.</span></h2>
+      <p class="about-body">EFX Fitness, 2019'dan bu yana Ankara Sincan'da bireysel dönüşümün merkezi. Her üyemize kişiselleştirilmiş antrenman programları ve profesyonel koçluk hizmeti sunuyoruz.<br><br>Hedefin güç, kondisyon ya da özgüven olsun — değişim burada başlar.</p>
+    </div>
+    <div class="stats rv d2">
+      <div class="stat">
+        <div class="stn"><span class="ctr" data-t="5">0</span>+</div>
+        <div><div class="stn-name">Yıllık Deneyim</div><div class="stn-desc">2019'dan bu yana kesintisiz</div></div>
+      </div>
+      <div class="stat">
+        <div class="stn"><span class="ctr" data-t="400">0</span>+</div>
+        <div><div class="stn-name">Mutlu Üye</div><div class="stn-desc">Hayatını dönüştüren insanlar</div></div>
+      </div>
+      <div class="stat">
+        <div class="stn"><span class="ctr" data-t="4">0</span></div>
+        <div><div class="stn-name">Farklı Program</div><div class="stn-desc">Her seviyeye uygun</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="hizmetler">
+    <div class="svc-hd">
+      <div class="rv">
+        <div class="lbl">Programlarımız</div>
+        <h2 class="stitle">Ne<br>Sunuyoruz</h2>
+      </div>
+    </div>
+    <div class="svc-grid">
+      <div class="sc rv">
+        <div class="sc-n">01</div><span class="sc-ico">💪</span>
+        <h3 class="sc-nm">Personal<br>Training</h3>
+        <p class="sc-ds">Sana özel antrenman programı ve birebir koçluk desteğiyle hedeflerine ulaş.</p>
+        <div class="sc-ar">→</div>
+      </div>
+      <div class="sc rv d1">
+        <div class="sc-n">02</div><span class="sc-ico">🧘</span>
+        <h3 class="sc-nm">Pilates</h3>
+        <p class="sc-ds">Core gücü ve esnekliği için uzman eşliğinde seanslar. Başlangıç ve ileri seviye.</p>
+        <div class="sc-ar">→</div>
+      </div>
+      <div class="sc rv d2">
+        <div class="sc-n">03</div><span class="sc-ico">🥊</span>
+        <h3 class="sc-nm">Boks &amp;<br>Kickboks</h3>
+        <p class="sc-ds">Teknik öğren, kondisyon kazan. Tüm seviyelere açık dövüş sporları antrenmanı.</p>
+        <div class="sc-ar">→</div>
+      </div>
+      <div class="sc rv d3" style="background:linear-gradient(145deg,rgba(200,168,75,.04),var(--bg2))">
+        <div class="sc-n">04</div><span class="sc-ico">⚡</span>
+        <h3 class="sc-nm">Kadınlara<br>Özel Alan</h3>
+        <p class="sc-ds">Tamamen kadınlara ayrılmış çalışma alanı. Güvenli ve motive edici ortam.</p>
+        <div class="sc-ar">→</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ghr"></div>
+
+  <!-- INFO -->
+  <div class="info" id="iletisim">
+    <div class="ipanel rv">
+      <h3 class="ititle">Çalışma Saatleri</h3>
+      <div class="hr-row"><span class="hr-day">Pazartesi — Cuma</span><span class="hr-time gc">10:00 — 23:00</span></div>
+      <div class="hr-row"><span class="hr-day">Cumartesi</span><span class="hr-time">10:00 — 22:00</span></div>
+      <div class="hr-row"><span class="hr-day">Pazar</span><span class="hr-time">10:00 — 20:00</span></div>
+    </div>
+    <div class="ipanel rv d2">
+      <h3 class="ititle">Bize Ulaş</h3>
+      <div class="ci">
+        <div class="cico">📍</div>
+        <div><div class="clbl">Adres</div><div class="cval">Menderes, Melih Gökçek Blv.<br>No:39/A/B, 06946 Sincan / Ankara</div></div>
+      </div>
+      <div class="ci">
+        <div class="cico">📞</div>
+        <div><div class="clbl">Telefon</div><div class="cval"><a href="tel:05345630985">0534 563 09 85</a></div></div>
+      </div>
+      <div class="ci">
+        <div class="cico">📸</div>
+        <div><div class="clbl">Instagram</div><div class="cval"><a href="https://instagram.com/efxteamm" target="_blank">@efxteamm</a></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINALE -->
+  <section class="finale">
+    <div class="fin-logo rv"><img src="efx-logo.png" alt="EFX" /></div>
+    <h2 class="fin-title rv">
+      <span class="t1">Başlamak İçin</span>
+      <span class="t2">HAZIR MISIN?</span>
+      <span class="t3">— EFX FITNESS —</span>
+    </h2>
+    <a href="tel:05345630985" class="btn-gold rv d2" style="font-size:12px;padding:18px 56px;display:inline-block;">
+      <span>Hemen Ara: 0534 563 09 85</span>
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="flogo">
+      <div class="fball"><img src="efx-logo.png" alt="EFX" /></div>
+      <span class="fwm">EFX FITNESS</span>
+    </div>
+    <span class="fcopy">© 2024 EFX Fitness — Tüm Hakları Saklıdır</span>
+    <div class="fsocial"><a href="https://instagram.com/efxteamm" target="_blank">@efxteamm</a></div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cx=document.getElementById('cx'),cr=document.getElementById('cr');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cx.style.cssText=`left:${mx}px;top:${my}px;`;});
+    (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.cssText=`left:${rx}px;top:${ry}px;`;requestAnimationFrame(loop);})();
+    document.querySelectorAll('a,button,.sc').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{cx.style.width='16px';cx.style.height='16px';cr.style.width='52px';cr.style.height='52px';});
+      el.addEventListener('mouseleave',()=>{cx.style.width='9px';cx.style.height='9px';cr.style.width='36px';cr.style.height='36px';});
+    });
+
+    // Nav scroll
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60));
+
+    // Scroll reveal
+    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.1});
+    document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+    // Counters
+    const cobs=new IntersectionObserver(es=>{
+      es.forEach(e=>{
+        if(!e.isIntersecting)return;
+        const el=e.target,t=+el.dataset.t;let v=0;const s=t/65;
+        const id=setInterval(()=>{v+=s;if(v>=t){v=t;clearInterval(id);}el.textContent=Math.floor(v);},18);
+        cobs.unobserve(el);
+      });
+    },{threshold:.5});
+    document.querySelectorAll('.ctr').forEach(el=>cobs.observe(el));
+  </script>
+</body>
+</html>
