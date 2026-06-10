@@ -33,6 +33,12 @@
     #cx{position:fixed;width:9px;height:9px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;}
     #cr{position:fixed;width:36px;height:36px;border:1px solid rgba(200,168,75,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
 
+    /* touch devices: no fake cursor, no cursor:none */
+    @media (hover:none), (pointer:coarse){
+      #cx,#cr{display:none;}
+      body, .nav-cta, .btn-gold, .btn-line, .sc { cursor:auto; }
+    }
+
     /* GRAIN */
     body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.02;pointer-events:none;z-index:9990;}
 
